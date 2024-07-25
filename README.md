@@ -18,7 +18,7 @@ This method performs penalized multivariate meta-analysis method adapted for ple
 
 ## Table of Contents
 - [Method](#running-of-the-pipeline)
-- [Application Dataset](#application-dataset)
+- [Application](#application)
 - [Simulation study](#simulation-study)
 - [Pipeline for pleiotropy analysis](#pipeline)
 - [How to Cite](#how-to-cite)
@@ -26,7 +26,7 @@ This method performs penalized multivariate meta-analysis method adapted for ple
 ## Method
 
 
-## Application Dataset
+## Application
 
 
 ## Simulation study

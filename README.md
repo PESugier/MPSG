@@ -4,7 +4,6 @@ Meta-analysis model adapted for Pleiotropy Selection with Group structure
 Created by: Pierre-Emmanuel Sugier<br>
 Creation date: 25 July 2024<br>
 Update: July 2024<br>
-https://cesp.inserm.fr/en/equipe/exposome-and-heredity
 <br>
 <br>
 

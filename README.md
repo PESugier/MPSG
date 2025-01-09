@@ -38,7 +38,7 @@ The current release allows for:
 
 4. Example code that includes illustrative bootstrapping code to detect variability in selected variables/groups of variables. 
 
-5. The use of the user friendly package for pleiotropy analysis, adapted to the use of MPSG from the pipeline of GCPBayes.
+TBA : (5. The use of the user friendly package for pleiotropy analysis, adapted to the use of MPSG from the pipeline of GCPBayes.)
 
 Future versions may build out different versions of adaptive weights, and allow consideration of study selection in selected groups.
 

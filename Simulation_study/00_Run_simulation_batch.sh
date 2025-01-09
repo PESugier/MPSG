@@ -58,37 +58,38 @@ Rscript ${scriptsimudir}/script_ASSET.R \
       --g ${G} \
       --mg ${mg} \
       --corr ${var_corr}
+# GCPBayes (DS)
+################################################
+Rscript ${scriptsimudir}/script_DS.R \
+      --path_out ${outputdir} \
+      --n_rep ${nseed} \
+      --effect ${effect} \
+      --SNR ${SNR} \
+      --GS ${GS} \
+      --IGS ${IGS} \
+      --n_study ${K} \
+      --n_indiv ${N} \
+      --g ${G} \
+      --mg ${mg} \
+      --corr ${var_corr}
+# GCPBayes (DS) Diag
+################################################        
+Rscript ${scriptsimudir}/script_DS_diag.R \
+      --path_out ${outputdir} \
+      --n_rep ${nseed} \
+      --effect ${effect} \
+      --SNR ${SNR} \
+      --GS ${GS} \
+      --IGS ${IGS} \
+      --n_study ${K} \
+      --n_indiv ${N} \
+      --g ${G} \
+      --mg ${mg} \
+      --corr ${var_corr}
 # META-PSG
 ################################################
 Rscript ${scriptsimudir}/script_MetaPSG_adapt.R \
       --path_metapsg ${metapsgdir} \
-      --path_out ${outputdir} \
-      --n_rep ${nseed} \
-      --effect ${effect} \
-      --SNR ${SNR} \
-      --GS ${GS} \
-      --IGS ${IGS} \
-      --n_study ${K} \
-      --n_indiv ${N} \
-      --g ${G} \
-      --mg ${mg} \
-      --corr ${var_corr}
-Rscript ${scriptsimudir}/script_MetaPSG_v2_adapt.R \
-      --path_metapsg ${metapsgdir} \
-      --path_out ${outputdir} \
-      --n_rep ${nseed} \
-      --effect ${effect} \
-      --SNR ${SNR} \
-      --GS ${GS} \
-      --IGS ${IGS} \
-      --n_study ${K} \
-      --n_indiv ${N} \
-      --g ${G} \
-      --mg ${mg} \
-      --corr ${var_corr}
-# GCPBayes (DS)
-################################################
-Rscript ${scriptsimudir}/script_DS_short.R \
       --path_out ${outputdir} \
       --n_rep ${nseed} \
       --effect ${effect} \
@@ -115,34 +116,8 @@ Rscript ${scriptsimudir}/script_MetaPSG_diag_adapt.R \
       --g ${G} \
       --mg ${mg} \
       --corr ${var_corr}
-Rscript ${scriptsimudir}/script_MetaPSG_v2_diag_adapt.R \
-      --path_metapsg ${metapsgdir} \
-      --path_out ${outputdir} \
-      --n_rep ${nseed} \
-      --effect ${effect} \
-      --SNR ${SNR} \
-      --GS ${GS} \
-      --IGS ${IGS} \
-      --n_study ${K} \
-      --n_indiv ${N} \
-      --g ${G} \
-      --mg ${mg} \
-      --corr ${var_corr}
-# GCPBayes (DS) Diag
-################################################        
-Rscript ${scriptsimudir}/script_DS_short_diag.R \
-      --path_out ${outputdir} \
-      --n_rep ${nseed} \
-      --effect ${effect} \
-      --SNR ${SNR} \
-      --GS ${GS} \
-      --IGS ${IGS} \
-      --n_study ${K} \
-      --n_indiv ${N} \
-      --g ${G} \
-      --mg ${mg} \
-      --corr ${var_corr}
 # MetaPSG without adaptive weights
+################################################  
 Rscript ${scriptsimudir}/script_MetaPSG.R \
       --path_metapsg ${metapsgdir} \
       --path_out ${outputdir} \
@@ -156,6 +131,8 @@ Rscript ${scriptsimudir}/script_MetaPSG.R \
       --g ${G} \
       --mg ${mg} \
       --corr ${var_corr}
+      # MetaPSG without adaptive weights Diag
+################################################  
 Rscript ${scriptsimudir}/script_MetaPSG_diag.R \
       --path_metapsg ${metapsgdir} \
       --path_out ${outputdir} \

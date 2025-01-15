@@ -51,7 +51,7 @@ The performance of the novel approach is compared to benchmark gene-level and SN
 
 
 ## Pipeline for pleiotropy analysis 
-TBD: A pipeline for ease of use of the MPSG approach for pleiotropy analysis has been developed and will be made available soon (adapted from the pipeline of our previous method called GCPBayes)
+A pipeline for ease of use of the MPSG approach for pleiotropy analysis has been developed and will be made available soon (adapted from the pipeline of our previous method called GCPBayes)
 
 ## How to Cite
 Sugier PE, Asgari Y, Sedki M, Truong T, Liquet B. "Meta-Analysis models with group structure for pleiotropy detection at gene and variant level by using summary statistics from multiple datasets"

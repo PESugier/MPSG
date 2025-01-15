@@ -34,4 +34,9 @@ The Bash script is running several R scripts corresponding to each method consid
 
 ## Results
 
-topo
+Preprocessed results can be found in separated folders corresponding to different simulation batches.
+
+Scripts used to generate these preprocessed results files from simulation outputs can also be found in this folder:
+script_generate_paper_tables_MCC.R
+script_generate_paper_tables_TNP.R
+script_generate_paper_tables_TPR.R

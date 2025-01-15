@@ -10,9 +10,9 @@ Update: Jan 2025<br>
 <br>
 
 ## Table of Contents
-- [Simulation study](#Simulation study)
-- [Codes](#Codes)
-- [Results](#Results)
+- [Simulation study](#simulation-study)
+- [Codes](#codes)
+- [Results](#results)
 
 ## Simulation study
 

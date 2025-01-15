@@ -29,7 +29,7 @@ The approaches considered are:
 
 Each simulation batch can be performed by running a Bash script with an initiation file informing on simulation parameters to consider, as follow: 
 
-00_Run_simulation_batch.sh simulation_batch_cor25_1.init
+./00_Run_simulation_batch.sh simulation_batch_cor25_1.init
 
 where simulation_batch_cor25_1.init is an example of .init file that has been run.
 

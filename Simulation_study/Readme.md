@@ -10,7 +10,7 @@ Update: Jan 2025<br>
 <br>
 
 ## Table of Contents
-- [Simulation study](#Simulation study)
+- [Simulation](#Simulation study)
 - [Codes](#Codes)
 - [Results](#Results)
 

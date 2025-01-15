@@ -38,8 +38,6 @@ The current release allows for:
 
 4. Example code that includes illustrative bootstrapping code to detect variability in selected variables/groups of variables. 
 
-TBD: (5. The use of the user friendly package for pleiotropy analysis, adapted to the use of MPSG from the pipeline of GCPBayes.)
-
 Future versions may build out different versions of adaptive weights, and allow consideration of study selection in selected groups.
 
 
@@ -53,7 +51,7 @@ The performance of the novel approach is compared to benchmark gene-level and SN
 
 
 ## Pipeline for pleiotropy analysis 
-TBD
+TBD: A pipeline for ease of use of the MPSG approach for pleiotropy analysis has been developed and will be made available soon (adapted from the pipeline of our previous method called GCPBayes)
 
 ## How to Cite
 Sugier PE, Asgari Y, Sedki M, Truong T, Liquet B. "Meta-Analysis models with group structure for pleiotropy detection at gene and variant level by using summary statistics from multiple datasets"

@@ -11,14 +11,17 @@ Update: July 2024<br>
 In this section, you can find the R codes to run MPSG approach (Meta-analysis model adapted for Pleiotropy Selection with Group structure)
 
 ## Table of Contents
-- [Method](#running-of-the-pipeline)
-- [Application](#application)
-- [Simulation study](#simulation-study)
-- [Pipeline for pleiotropy analysis](#pipeline)
-- [How to Cite](#how-to-cite)
+- [metapsg_parallel.r](#parallel)
+- [metapsg_gv_solver.r](#solver)
+- [metapsg_sub.r](#sub)
+- [RcppExports.r](#Rcpp)
 
-## Method
+## parallel
 
-## 
+## solver
+
+## sub
+
+## Rcpp
 
 

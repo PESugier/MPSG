@@ -34,9 +34,9 @@ The current release allows for:
 
 2. Choosing weights version for the penalisation of the method: standard version of the adaptive weights and no use of adaptive weights.
 
-3. Parallelization along both hyperparameters alpha and lambda
+3. Parallelization along both hyperparameters alpha and lambda.
 
-4. Example code that includes illustrative bootstrapping code to detect variability in selected variables/groups of variables. 
+4. Example code can be found through the application and simulation sections. 
 
 Future versions may build out different versions of adaptive weights, and allow consideration of study selection in selected groups.
 

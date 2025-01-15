@@ -27,7 +27,7 @@ The approaches considered are:
 
 ## Codes
 
-Each simulation batch can be performed by running a Bash script with a init file as parameter as follow:  ../00_Run_simulation_batch.sh simulation_batch_cor25_1.init
+Each simulation batch can be performed by running a Bash script with an initiation file informing on simulation parameters to consider, as follow:  ../00_Run_simulation_batch.sh simulation_batch_cor25_1.init
 where simulation_batch_cor25_1.init is an example of .init file that has been run.
 
 The Bash script is running several R scripts corresponding to each method considered one by one (ex: script_MetaPSG.R). The corresponding codes can be found in the Scripts/ folder.

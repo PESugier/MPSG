@@ -5,10 +5,9 @@ Created by: Pierre-Emmanuel Sugier<br>
 Creation date: 25 July 2024<br>
 Update: July 2024<br>
 <br>
-<br>
 
 **NOTES:**
-<br><br>
+<br>
 
 This is a R package for the implementation of MPSG approach (Meta-analysis model adapted for Pleiotropy Selection with Group structure). 
 

@@ -5,7 +5,6 @@ Created by: Pierre-Emmanuel Sugier<br>
 Creation date: 25 July 2024<br>
 Update: Jan 2025<br>
 <br>
-<br>
 
 ## Table of Contents
 - [Simulation study](#simulation-study)

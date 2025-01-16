@@ -35,7 +35,9 @@ The current release allows for:
 
 3. Parallelization along both hyperparameters alpha and lambda.
 
-4. Example code can be found through the application and simulation sections. 
+4. A R package is available in the corresponding subfolder. All specific codes to run the methods are also made available in the R/ and src/ folder. 
+
+5. Examples codes can be found through the application and simulation sections. 
 
 Future versions may build out different versions of adaptive weights, and allow consideration of study selection in selected groups.
 

@@ -3,8 +3,8 @@ library(Matrix)
 library(Rcpp)
 library(RcppArmadillo)
 
-sourceCpp("/home1/6_AMLAP/PE/METAPSG/scripts/src/arma_inv.cpp")
-source("/home1/6_AMLAP/PE/METAPSG/scripts/metapsg_sub.r")
+sourceCpp("arma_inv.cpp")
+source("metapsg_sub.r")
 
 
 ##### Architecture

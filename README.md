@@ -1,5 +1,4 @@
-# MPSG
-Meta-analysis model adapted for Pleiotropy Selection with Group structure
+# Meta-analysis model adapted for Pleiotropy Selection with Group structure (MPSG)
 
 Created by: Pierre-Emmanuel Sugier<br>
 Creation date: 25 July 2024<br>

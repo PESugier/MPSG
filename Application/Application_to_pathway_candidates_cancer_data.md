@@ -32,8 +32,9 @@ n_lambda_pts <- 30
 
 ## Load summary statistics and meta data
 
+Then, we load precalculated summary statistics (here from a bayesian glm by using the bhglm packages), but you can for example use summary statistics from a GWAS. We also provide here SNP to genes and gene to pathways annotations for the data.
+
 ``` r
 load("summary_stat_application_gaussian_prior.RData")
 load("info_annot_data_BC_TC.RData")
-
 ```

@@ -17,7 +17,7 @@ source("metapsg_parallel.r")
 
 ## Hardcoded parameters
 
-MPSG uses parallelisation to solve hyper-parameters tuning on a 2D-grid of alpha and lambda values. To do it, 
+MPSG uses parallelisation to solve hyper-parameters tuning on a 2D-grid of alpha and lambda values. To do it, you need to specify the number of cpu you want to use for analysis. If you do not want to use parallellisation, you can directly use the metapsg_gv() function.
 
 ``` r
 no_cpu <- 10 # number of CPU for parallelisation

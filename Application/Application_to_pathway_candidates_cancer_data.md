@@ -29,3 +29,11 @@ The alpha parameter is controlling the variable/group penalisation ratio. As it 
 alpha_values <- seq(0.1,0.9,0.1)
 n_lambda_pts <- 30
 ```
+
+## Load summary statistics and meta data
+
+``` r
+load("summary_stat_application_gaussian_prior.RData")
+load("info_annot_data_BC_TC.RData")
+
+```

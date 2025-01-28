@@ -1,4 +1,3 @@
-library(BhGLM)
 library(arm)
 library(tidyverse)
 #library(Matrix)
@@ -72,11 +71,11 @@ for(g in 1:G){
   tryCatch({
     sumstat[[g]]$cov_inv <- f_cpp_inv_var(covar=sumstat[[g]]$covar, same_var=FALSE)
   },error = function(e){
-    print(paste0("Une erreur est survenue pour le gène numéro: ", g," -> ", e$message))
+    print(paste0("Une erreur est survenue pour le gÃ¨ne numÃ©ro: ", g," -> ", e$message))
     sumstat[[g]]$covar[,,1] <<- sumstat[[g]]$covar[,,1] + 0.01*diag(diag(sumstat[[g]]$covar[,,1]))
     sumstat[[g]]$covar[,,2] <<- sumstat[[g]]$covar[,,2] + 0.01*diag(diag(sumstat[[g]]$covar[,,2]))
     sumstat[[g]]$cov_inv <<- f_cpp_inv_var(covar=sumstat[[g]]$covar, same_var=FALSE)
-    print("Erreur corrigée avec l'ajout d'un petit terme diagonal")
+    print("Erreur corrigÃ©e avec l'ajout d'un petit terme diagonal")
   })
 }
 

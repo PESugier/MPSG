@@ -43,8 +43,7 @@ Future versions may build out different versions of adaptive weights, and allow 
 
 ## Application
 
-Our method is applied to the identification of potential pleiotropic genes between breast and thyroid cancer by using multivariate summary statistics generated from pathway candidate data. We provide [here](https://[github.com/benoit-liquet/BSS-PCA-PLS/blob/main/](https://github.com/PESugier/MPSG/main/Application/Example_application.md) the code to illustrate the workings of our MPSG method
-for this application,  an example data with $p = 2$.
+Our method is applied to the identification of potential pleiotropic genes between breast and thyroid cancer by using multivariate summary statistics generated from pathway candidate data. We provide [here](https://[github.com/benoit-liquet/BSS-PCA-PLS/blob/main/](https://github.com/PESugier/MPSG/main/Application/Application_to_pathway_candidates_cancer_data.md) the code to illustrate the workings of our MPSG method for this application.
 
 
 ## Simulation study

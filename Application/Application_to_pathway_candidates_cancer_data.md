@@ -15,40 +15,17 @@ For this example, we will use the R code version of the package. Hence, we need 
 source("metapsg_parallel.r")
 ```
 
-## Generate some data for PLS1
+## Hardcoded parameters
+
+MPSG uses parallelisation to solve hyper-parameters tuning on a 2D-grid of alpha and lambda values. To do it, 
 
 ``` r
-set.seed(1)
-beta <- c(5,0)
-n <- 100
-X <- mvtnorm::rmvnorm(n,mean=c(1,1),sigma=matrix(c(3,1,1,2),ncol=2,nrow=2,byrow=T))
-Y <- X%*%matrix(beta,ncol=1)+rnorm(n,sd=1)
+no_cpu <- 10 # number of CPU for parallelisation
 ```
 
-## Loss and gradient path for BSS-PLS1
-
--   Lambda is 0
+The alpha parameter is controlling the variable/group penalisation ratio. As it is a value between 0 and 1, we suggest to test alpha for different 0.1 increasing values from 0.1 to 0.9.  The lambda parameter is controlling the overall penalisation. The user can control the number of lambda values tested. These values will be automatically generated following a logarithmic grid. We suggest to test for a 30 different lambda values per alpha value. 
 
 ``` r
-t0 <- rep(0.5,2)
-plot.landscape.path.BSS(lambda=0,t0=t0)
+alpha_values <- seq(0.1,0.9,0.1)
+n_lambda_pts <- 30
 ```
-![](landscape_lam0.png)
-
--   Lambda is 150
-
-``` r
-t0 <- rep(0.5,2)
-plot.landscape.path.BSS(lambda=150,t0=t0)
-#rgl.snapshot('landscape_lam150.png', fmt = 'png')
-```
-![](landscape_lam150.png)
-
--   Lambda is 450
-
-``` r
-t0 <- rep(0.5,2)
-plot.landscape.path.BSS(lambda=450,t0=t0)
-#rgl.snapshot('landscape_lam450.png', fmt = 'png')
-```
-![](landscape_lam450.png)

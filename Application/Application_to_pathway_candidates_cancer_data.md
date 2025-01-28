@@ -20,7 +20,7 @@ source("metapsg_parallel.r")
 MPSG uses parallelisation to solve hyper-parameters tuning on a 2D-grid of alpha and lambda values. To do it, you need to specify the number of cpu you want to use for analysis. If you do not want to use parallellisation, you can directly use the metapsg_gv() function.
 
 ``` r
-no_cpu <- 10 # number of CPU for parallelisation
+no_cpu <- 30 # number of CPU for parallelisation
 ```
 
 The alpha parameter is controlling the variable/group penalisation ratio. As it is a value between 0 and 1, we suggest to test alpha for different 0.1 increasing values from 0.1 to 0.9.  The lambda parameter is controlling the overall penalisation. The user can control the number of lambda values tested. These values will be automatically generated following a logarithmic grid. We suggest to test for a 30 different lambda values per alpha value. 

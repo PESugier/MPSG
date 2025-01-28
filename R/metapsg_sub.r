@@ -5,7 +5,7 @@
 # -> var_t [[1:G]] [1:ng,1:ng,1:s]
 ############################################
 
-sourceCpp("/home1/6_AMLAP/PE/METAPSG/scripts/src/arma_inv.cpp")
+sourceCpp("arma_inv.cpp")
 
 library(abind)
 

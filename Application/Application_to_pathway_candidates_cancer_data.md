@@ -1,6 +1,18 @@
+# Application to analysis of pleiotropy between thyroid cancer and breast cancer from pathway candidate summary data
+
+In this vignette we used the following R packages
+
 ``` r
-library(mvtnorm)
-source("Function_PLS1.R")
+library(arm)
+library(tidyverse)
+library(doSnow)
+library(tictoc)
+```
+
+For this example, we will use the R code version of the package. Hence, we need to source the main code that is sourcing the others. All codes need to be in the same folder.
+
+``` r
+source("metapsg_parallel.r")
 ```
 
 ## Generate some data for PLS1

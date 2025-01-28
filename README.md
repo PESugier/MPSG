@@ -48,7 +48,7 @@ Our method is applied to the identification of potential pleiotropic genes betwe
 The performance of the novel approach is compared to benchmark gene-level and SNP-level meta-analysis approaches on simulated data by considering different kind of summary data as inputs.
 
 
-## Pipeline for pleiotropy analysis 
+## Pipeline
 A pipeline for ease of use of the MPSG approach for pleiotropy analysis has been developed and will be made available soon (adapted from the pipeline of our previous method called GCPBayes)
 
 ## How to Cite

@@ -2,7 +2,7 @@ library(tictoc)
 library(doParallel)
 library(doSNOW)
 
-source("/home1/6_AMLAP/PE/METAPSG/scripts/metapsg_gv_solver.r")
+source("metapsg_gv_solver.r")
 
 # Function to create alpha/lambda grid
 f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var = FALSE, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-03, npts=20){
@@ -17,7 +17,7 @@ f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var =
     # To build the grid of lambda for each value of alpha
     found_grid <- foreach(i=1:n_alpha) %dopar% {
         #redefine functions
-        source("/home1/6_AMLAP/PE/METAPSG/scripts/metapsg_gv_solver.r")
+        source("metapsg_gv_solver.r")
         lambda_max <- find_lambda_max(sumstat=sumstat, n_s=n_s, alpha=alpha[i], w_g=w_g, w_p=w_p)
         lambda_grid <- f_grid_loge(lambda_max, eps=eps, npts=npts)
 		list(alpha=alpha[i], lambdas=lambda_grid)

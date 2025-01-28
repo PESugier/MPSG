@@ -5,12 +5,9 @@ Creation date: 25 July 2024<br>
 Update: Jan 2025<br>
 <br>
 
-**NOTES:**
-<br>
+This is a R package for the implementation of MPSG approach (Meta-analysis model adapted for Pleiotropy Selection with Group structure). This method performs penalized multivariate meta-analysis method adapted for pleiotropy and take into account the group structure information nested in the data to select relevant variants and genes (or pathways) from all the genetic information.
 
-This is a R package for the implementation of MPSG approach (Meta-analysis model adapted for Pleiotropy Selection with Group structure). 
-
-This method performs penalized multivariate meta-analysis method adapted for pleiotropy and take into account the group structure information nested in the data to select relevant variants and genes (or pathways) from all the genetic information.
+We provide an example of application of the method in the #application section.
 
 
 ## Table of Contents

@@ -64,7 +64,7 @@ f_selec_mod_metapsg_gv_parallel <- function(sumstat, n_s, alpha, adaptive=TRUE, 
   #
   results <- foreach(i=1:dim(grid_to_run)[1]) %dopar% {
     #redefine functions
-    source("/home1/6_AMLAP/PE/METAPSG/scripts/metapsg_gv_solver.r")
+    source("metapsg_gv_solver.r")
     # temporary stock
     tempo <- metapsg_gv(sumstat, n_s, alpha=grid_to_run[i,1], lambda=grid_to_run[i,2], same_var = FALSE, gwas=FALSE, rho, t_inc, t_dec, mu, w_p, w_g, max_iter, tol_abs, tol_rel)
     # information for model selection

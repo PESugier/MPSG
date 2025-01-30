@@ -181,7 +181,8 @@ for(g in 1:n_example){ # for example purpose
 We can now run the MPSG method on <code>sumstat</code> inputs, by using
 the <code>f_selec_mod_metapsg_gv_parallel()</code> function that.
 
-- here MPSG will compute adaptive weights as <code>adaptive=TRUE</code>
+- here MPSG will be run with adaptive weights as
+  <code>adaptive=TRUE</code>
 
 ``` r
 res <- f_selec_mod_metapsg_gv_parallel(sumstat, n_s, alpha=alpha_values, adaptive=TRUE, same_var = FALSE, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-03, npts=n_lambda_pts, ncpu=no_cpu)

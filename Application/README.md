@@ -218,7 +218,7 @@ for (g in 1:n_example){
 
 ### Pleiotropy at gene-level (group)
 
-Two genes has been highlighted as pleiotropic by MPSG
+Two genes have been highlighted as pleiotropic by MPSG
 
 ``` r
 pleio_genes_names

@@ -216,16 +216,19 @@ for (g in 1:n_example){
 
 ## Interpretation of the results
 
-Pleiotropy at gene-level (group): two genes has been highlighted as
-pleiotropic by MPSG
+### Pleiotropy at gene-level (group)
+
+Two genes has been highlighted as pleiotropic by MPSG
 
 ``` r
 pleio_genes_names
 #> [1] "NEGR1"  "TGFBR3"
 ```
 
-Pleiotropy at SNP-level (variable): SNPs with non-zero values in
-selected genes can be considered as pleiotropic
+### Pleiotropy at SNP-level (variable)
+
+SNPs with non-zero values in selected genes can be considered as
+pleiotropic
 
 As example, the outputs of MPSG for the first gene are:
 

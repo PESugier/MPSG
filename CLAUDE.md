@@ -1,0 +1,52 @@
+# CLAUDE.md — MPSG
+
+## Contexte
+MPSG est la méthode de Sugier et al. (2025), *Biostatistics* 26(1), kxaf037,
+doi:10.1093/biostatistics/kxaf037 : méta-analyse multivariée pénalisée (ADMM)
+pour détecter la pléiotropie au niveau gène et SNP à partir de statistiques résumées.
+
+Objectif du chantier : transformer ce dépôt de scripts en package R installable,
+documenté et soumissible au CRAN, par petites étapes validées une à une par le
+mainteneur (Pierre-Emmanuel Sugier).
+
+## Organisation du travail
+- Chaque étape est décrite dans `dev/etapes/NN-nom.md`. N'exécute que l'étape
+  demandée, rien au-delà.
+- Les décisions déjà prises sont dans `dev/DECISIONS.md`. Ne prends aucune
+  décision de conception qui n'y figure pas : si une question se pose, arrête-toi
+  et pose-la dans le rapport.
+- En cas d'imprévu (fichier manquant, test qui échoue, comportement inattendu),
+  arrête-toi et décris-le plutôt que de le contourner.
+
+## Règles Git
+- Travailler sur la branche `dev`.
+- Autorisé : `git status`, `git diff`, `git log`, `git mv`, `git add`, `git switch`.
+- Interdit : `git commit`, `git push`, `git tag`, `git reset --hard`, `git rebase`,
+  suppression de branche ou de tag. Le mainteneur commite lui-même après relecture.
+- Ne jamais toucher au tag `v1.1` (état du dépôt au moment de la publication).
+
+## Intégrité scientifique
+- Aucune modification ne doit changer les résultats numériques, sauf si l'étape
+  le demande explicitement.
+- Toute modification touchant au calcul (solveur ADMM, poids, grille de lambda,
+  MIC) doit être accompagnée d'un test comparant aux résultats du code original.
+- Le contenu de `paper/` est une archive : ne pas le modifier sans instruction
+  explicite.
+
+## Environnement
+- Windows, PowerShell : pas de `&&` sous PowerShell 5.1 (une commande par ligne).
+- R via `Rscript`.
+- Préserver les fins de ligne existantes (CRLF/LF) des fichiers modifiés.
+
+## Langues
+- Code, documentation du package, README, messages de commit : anglais.
+- Rapports dans `dev/rapports/` : français.
+
+## Rapport de fin d'étape
+À écrire dans `dev/rapports/NN-nom.md` et à afficher à l'écran :
+1. Résumé (3 à 5 lignes).
+2. Fichiers créés, modifiés ou déplacés (sorties de `git status` et de
+   `git diff --cached --stat -M`).
+3. Vérifications effectuées et leur résultat.
+4. Écarts par rapport aux instructions, anomalies, questions ouvertes.
+5. Message de commit proposé.

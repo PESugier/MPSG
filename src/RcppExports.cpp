@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // arma_inv
 arma::mat arma_inv(arma::mat M);
-RcppExport SEXP _METAPSG_arma_inv(SEXP MSEXP) {
+RcppExport SEXP _MPSG_arma_inv(SEXP MSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -24,11 +24,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_METAPSG_arma_inv", (DL_FUNC) &_METAPSG_arma_inv, 1},
+    {"_MPSG_arma_inv", (DL_FUNC) &_MPSG_arma_inv, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_METAPSG(DllInfo *dll) {
+RcppExport void R_init_MPSG(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

@@ -1,0 +1,44 @@
+== adaptive weights ==
+time: 16.1 min
+best model: alpha = 0.2, lambda = 163.15108, MIC = 7.2905048
+genes selected: 15 (reference: 15)
+same genes, same order: TRUE
+same number of selected SNPs per gene: TRUE
+max |beta - beta_ref| over common genes: 1.18e-14
+genes (selected SNPs / reference):
+  NEGR1      33 /   33
+  TGFBR3     19 /   19
+  NPAS2      13 /   13
+  IL18RAP     3 /    3
+  UGT1A8      8 /    8
+  GLB1        6 /    6
+  RPA3        2 /    2
+  EGFR       28 /   28
+  EBF2       11 /   11
+  LRRN6C    101 /  101
+  RORB        5 /    5
+  BCAT1      13 /   13
+  CASC1       3 /    3
+  RORA      188 /  188
+  FTO        43 /   43
+
+== standard weights ==
+time: 5.4 min
+best model: alpha = 0.9, lambda = 84.810061, MIC = 7.7760855
+genes selected: 10 (reference: 10)
+same genes, same order: TRUE
+same number of selected SNPs per gene: TRUE
+max |beta - beta_ref| over common genes: 7.91e-16
+genes (selected SNPs / reference):
+  NEGR1      31 /   31
+  TGFBR3     14 /   14
+  NPAS2      14 /   14
+  EGFR       36 /   36
+  EBF2       17 /   17
+  LRRN6C    120 /  120
+  BCAT1      11 /   11
+  PARP2       1 /    1
+  RORA      225 /  225
+  FTO        52 /   52
+
+total time: 21.5 min

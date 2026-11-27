@@ -1,8 +1,3 @@
-library(tictoc)
-library(doParallel)
-library(doSNOW)
-
-source("metapsg_gv_solver.r")
 
 # Function to create alpha/lambda grid
 f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var = FALSE, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-03, npts=20){
@@ -12,12 +7,10 @@ f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var =
     cl_grid <- makeCluster(n_alpha, outfile="") #not to overload your computer
     print(cl_grid)
     registerDoParallel(cl_grid)
-    registerDoSNOW(cl_grid)
 	#
     # To build the grid of lambda for each value of alpha
-    found_grid <- foreach(i=1:n_alpha) %dopar% {
+    found_grid <- foreach(i=1:n_alpha, .packages = "MPSG") %dopar% {
         #redefine functions
-        source("metapsg_gv_solver.r")
         lambda_max <- find_lambda_max(sumstat=sumstat, n_s=n_s, alpha=alpha[i], w_g=w_g, w_p=w_p)
         lambda_grid <- f_grid_loge(lambda_max, eps=eps, npts=npts)
 		list(alpha=alpha[i], lambdas=lambda_grid)
@@ -30,6 +23,49 @@ f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var =
 	return(list_grid)
 }   
 
+#' Fit and select the MPSG model on a grid of alpha and lambda, in parallel
+#'
+#' Fits the penalised multivariate meta-analysis model with group structure
+#' with an ADMM algorithm on a two-dimensional grid of values of `alpha` and
+#' `lambda`, using parallel worker processes, and returns the model with the
+#' smallest modified information criterion (MIC). This is the interface used
+#' for the analyses of Sugier et al. (2025).
+#'
+#' For each value of `alpha`, a grid of `npts` values of `lambda` is built as
+#' in [f_selec_mod_metapsg_gv()] (one worker process per value of `alpha`).
+#' The models of the whole grid are then fitted on a cluster of `ncpu` worker
+#' processes. The MIC is always computed with the inverse covariance matrices
+#' (as with `gwas = FALSE` in [f_selec_mod_metapsg_gv()]). The function prints
+#' information on the clusters and the MIC values along the grid.
+#'
+#' @inheritParams f_selec_mod_metapsg_gv
+#' @param alpha Numeric vector of values of `alpha` (share of the penalty
+#'   given to the variable level, see [f_selec_mod_metapsg_gv()]). In the
+#'   current implementation, it must contain at least two values.
+#' @param eps Ratio between the smallest and the largest value of the grid of
+#'   `lambda`, for each value of `alpha`.
+#' @param npts Number of values in the grid of `lambda`, for each value of
+#'   `alpha`.
+#' @param ncpu Number of worker processes used to fit the models of the grid.
+#'
+#' @return A list with four components describing the model with the smallest
+#'   MIC (the first one in case of ties):
+#'   * `model`: list with one `n_g x K` matrix of penalised estimates per
+#'     group.
+#'   * `info_model`: one-row data frame with columns `alpha`, `lambda`, `MIC`,
+#'     `iter` (number of ADMM iterations) and `norm_betah` (Frobenius norm of
+#'     the penalised estimates).
+#'   * `results`: data frame of the ADMM iterations of this model (`iter`,
+#'     `r_norm`, `s_norm`, `rho`, `b_norm`, `z_norm`, `u_norm`).
+#'   * `MIC`: numeric vector of the MIC of all the models of the grid, ordered
+#'     by value of `alpha` (as given) and, within each, by increasing `lambda`.
+#'
+#' @references Sugier, P.-E., Asgari, Y., Sedki, M., Truong, T. and Liquet, B.
+#'   (2025). Biostatistics, 26(1), kxaf037. \doi{10.1093/biostatistics/kxaf037}
+#'
+#' @seealso [f_selec_mod_metapsg_gv()], [f_cpp_inv_var()].
+#'
+#' @export
 f_selec_mod_metapsg_gv_parallel <- function(sumstat, n_s, alpha, adaptive=TRUE, same_var = FALSE, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-03, npts=20, ncpu){
   #
   #Definitions step
@@ -56,15 +92,13 @@ f_selec_mod_metapsg_gv_parallel <- function(sumstat, n_s, alpha, adaptive=TRUE, 
   cl <- makeCluster(ncpu, outfile="") #not to overload your computer
   print(cl)
   registerDoParallel(cl)
-  registerDoSNOW(cl)
   #
   # To run  meta-psg solver on the grid
   #
   # by using parallel mode
   #
-  results <- foreach(i=1:dim(grid_to_run)[1]) %dopar% {
+  results <- foreach(i=1:dim(grid_to_run)[1], .packages = "MPSG") %dopar% {
     #redefine functions
-    source("metapsg_gv_solver.r")
     # temporary stock
     tempo <- metapsg_gv(sumstat, n_s, alpha=grid_to_run[i,1], lambda=grid_to_run[i,2], same_var = FALSE, gwas=FALSE, rho, t_inc, t_dec, mu, w_p, w_g, max_iter, tol_abs, tol_rel)
     # information for model selection

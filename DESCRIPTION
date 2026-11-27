@@ -1,0 +1,39 @@
+Package: MPSG
+Type: Package
+Title: Meta-Analysis Model for Pleiotropy Selection with Group Structure
+Version: 1.1.9000
+Authors@R: c(
+    person("Pierre-Emmanuel", "Sugier", , "pierre-emmanuel.sugier@u-pariscite.fr",
+           role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5846-1104")),
+    person("Yazdan", "Asgari", role = "aut", comment = c(ORCID = "0000-0001-6993-6956")),
+    person("Mohammed", "Sedki", role = "aut", comment = c(ORCID = "0000-0001-5489-9611")),
+    person("Thérèse", "Truong", role = "aut", comment = c(ORCID = "0000-0002-2943-6786")),
+    person("Benoit", "Liquet", role = "aut", comment = c(ORCID = "0000-0002-8136-2294"))
+  )
+Description: Detects cross-phenotype (pleiotropic) genetic associations from
+    summary statistics of several studies. A penalised multivariate
+    meta-analysis model with group structure selects, jointly across all
+    studies, groups of variants (such as genes or pathways) and variants
+    within groups. The model is fitted with an alternating direction method
+    of multipliers (ADMM) algorithm and tuned with a modified information
+    criterion. The method is described in Sugier et al. (2025)
+    <doi:10.1093/biostatistics/kxaf037>.
+License: GPL (>= 3)
+URL: https://github.com/PESugier/MPSG
+BugReports: https://github.com/PESugier/MPSG/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    doParallel,
+    foreach,
+    parallel,
+    Rcpp
+LinkingTo:
+    Rcpp,
+    RcppArmadillo
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.1.1

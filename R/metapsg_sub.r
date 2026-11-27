@@ -5,9 +5,7 @@
 # -> var_t [[1:G]] [1:ng,1:ng,1:s]
 ############################################
 
-sourceCpp("arma_inv.cpp")
 
-library(abind)
 
 #############################################
 # Sub Functions to dev
@@ -49,6 +47,29 @@ f_inv_var <- function(covar, same_var=FALSE){
 }
 
 # C++ version
+#' Inverse of the covariance matrices of each study
+#'
+#' Computes, for one group of variables, the inverse of the covariance matrix
+#' of the estimated effects in each study. This is the interface used for the
+#' analyses of Sugier et al. (2025).
+#'
+#' Despite its name, the inversion is done with [base::solve()].
+#'
+#' @param covar Numeric array of dimension `n x n x K`: the covariance matrix
+#'   of the `n` estimated effects of the group, for each of the `K` studies.
+#' @param same_var Logical. If `TRUE`, the matrix of the first study is
+#'   inverted and its inverse is used for all `K` studies. If `FALSE` (the
+#'   default), the matrix of each study is inverted separately.
+#'
+#' @return Numeric array of dimension `n x n x K` containing the inverse
+#'   covariance matrices, in the same order as the studies of `covar`. It can
+#'   be used as the `cov_inv` element of a group in the `sumstat` argument of
+#'   [f_selec_mod_metapsg_gv()] and [f_selec_mod_metapsg_gv_parallel()].
+#'
+#' @references Sugier, P.-E., Asgari, Y., Sedki, M., Truong, T. and Liquet, B.
+#'   (2025). Biostatistics, 26(1), kxaf037. \doi{10.1093/biostatistics/kxaf037}
+#'
+#' @export
 f_cpp_inv_var <- function(covar, same_var=FALSE){
   K <- dim(covar)[3]
   n <- dim(covar)[1]

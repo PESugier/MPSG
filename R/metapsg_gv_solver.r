@@ -1,10 +1,5 @@
 #library(tidyverse)
-library(Matrix)
-library(Rcpp)
-library(RcppArmadillo)
 
-sourceCpp("arma_inv.cpp")
-source("metapsg_sub.r")
 
 
 ##### Architecture
@@ -136,6 +131,80 @@ metapsg_gv <- function(sumstat, n_s, alpha=0.1, lambda, same_var = FALSE, gwas =
 #  To run metapsg solvers on a 1D grid based on a alpha value
 ###############################################################
 
+#' Fit the MPSG model along a grid of penalty values
+#'
+#' Fits the penalised multivariate meta-analysis model with group structure
+#' (variables nested in groups, effects estimated in several studies) with an
+#' ADMM algorithm, for one value of `alpha` and a grid of values of the
+#' penalty `lambda`. This is the interface used for the analyses of Sugier
+#' et al. (2025).
+#'
+#' The penalty `lambda` is split into `(1 - alpha) * lambda` for the
+#' group-level penalty and `alpha * lambda` for the variable-level penalty.
+#' The grid contains `npts` values of `lambda`, equally spaced on the log
+#' scale between `eps * lambda_max` and `lambda_max`, where `lambda_max` is
+#' computed from the data by an internal heuristic. The function returns the
+#' fits for all values of the grid and does not select a model.
+#'
+#' @param sumstat List with one element per group (for instance a gene). Each
+#'   element is a list with two components: `beta`, a numeric matrix of
+#'   dimension `n_g x K` of estimated effects (one row per variable of the
+#'   group, one column per study), and `cov_inv`, a numeric array of dimension
+#'   `n_g x n_g x K` of inverse covariance matrices of these estimates (see
+#'   [f_cpp_inv_var()]).
+#' @param n_s Numeric vector of length `K`: number of individuals in each
+#'   study, in the same order as the columns of `beta`.
+#' @param alpha Single numeric value: share of the penalty given to the
+#'   variable level (`alpha * lambda`); the group level receives
+#'   `(1 - alpha) * lambda`.
+#' @param adaptive Logical. If `TRUE` (the default), adaptive weights are
+#'   used: the weight of a variable is the inverse of the Euclidean norm of
+#'   its estimated effects across studies, and the weight of a group is the
+#'   inverse of the Frobenius norm of its matrix `beta`. If `FALSE`, the
+#'   weight of a variable is `sqrt(K)` and the weight of a group is
+#'   `sqrt(n_g * K)`.
+#' @param same_var Logical. Currently ignored: the solver is always called
+#'   with `same_var = FALSE`.
+#' @param gwas Logical. If `FALSE` (the default), the goodness-of-fit term of
+#'   the modified information criterion (MIC) is the sum, over studies, of the
+#'   quadratic form of the differences between penalised and input estimates
+#'   with the matrix `cov_inv / n_s`. If `TRUE`, it is the plain sum of
+#'   squared differences.
+#' @param rho Positive numeric: initial value of the ADMM penalty parameter.
+#' @param t_inc,t_dec Numeric factors by which `rho` is multiplied (`t_inc`)
+#'   or divided (`t_dec`) when the norm of the primal residual is larger than
+#'   `mu` times the norm of the dual residual, or the reverse.
+#' @param mu Numeric: threshold on the ratio of the primal and dual residual
+#'   norms that triggers an update of `rho`.
+#' @param max_iter Maximum number of ADMM iterations for each value of
+#'   `lambda`.
+#' @param tol_abs,tol_rel Absolute and relative tolerances of the ADMM
+#'   stopping criterion on the primal and dual residuals.
+#' @param eps Ratio between the smallest and the largest value of the grid of
+#'   `lambda`.
+#' @param npts Number of values in the grid of `lambda`.
+#'
+#' @return A list with two components:
+#'   * `selmod`: a data frame with one row per value of `lambda` (in
+#'     increasing order) and columns `alpha`, `lambda`, `MIC` (modified
+#'     information criterion), `iter` (number of ADMM iterations),
+#'     `norm_betah` (Frobenius norm of the penalised estimates), `ng_hit`
+#'     (number of groups with at least one non-zero estimate) and `nv_hit`
+#'     (number of variables with at least one non-zero estimate).
+#'   * `results`: a list with one element per value of `lambda`, in the same
+#'     order, each a list with `info_grid` (data frame with the values of
+#'     `alpha` and `lambda`), `beta_select` (list with one `n_g x K` matrix of
+#'     penalised estimates per group) and `info` (data frame of the ADMM
+#'     iterations: `iter`, `r_norm`, `s_norm`, `rho`, `b_norm`, `z_norm`,
+#'     `u_norm`).
+#'
+#' @references Sugier, P.-E., Asgari, Y., Sedki, M., Truong, T. and Liquet, B.
+#'   (2025). Biostatistics, 26(1), kxaf037. \doi{10.1093/biostatistics/kxaf037}
+#'
+#' @seealso [f_selec_mod_metapsg_gv_parallel()] for several values of `alpha`
+#'   and model selection, [f_cpp_inv_var()].
+#'
+#' @export
 f_selec_mod_metapsg_gv <- function(sumstat, n_s, alpha, adaptive=TRUE, same_var = FALSE, gwas = FALSE, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-02, npts=20){
   selmod <- data.frame(alpha=NA, lambda=NA, MIC=NA, iter=NA, norm_betah=NA)
   results <- list()

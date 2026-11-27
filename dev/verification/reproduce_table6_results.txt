@@ -1,5 +1,5 @@
 == adaptive weights ==
-time: 16.1 min
+time: 14.7 min
 best model: alpha = 0.2, lambda = 163.15108, MIC = 7.2905048
 genes selected: 15 (reference: 15)
 same genes, same order: TRUE
@@ -23,7 +23,7 @@ genes (selected SNPs / reference):
   FTO        43 /   43
 
 == standard weights ==
-time: 5.4 min
+time: 5.7 min
 best model: alpha = 0.9, lambda = 84.810061, MIC = 7.7760855
 genes selected: 10 (reference: 10)
 same genes, same order: TRUE
@@ -41,4 +41,4 @@ genes (selected SNPs / reference):
   RORA      225 /  225
   FTO        52 /   52
 
-total time: 21.5 min
+total time: 20.4 min

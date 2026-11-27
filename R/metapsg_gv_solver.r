@@ -14,7 +14,7 @@
 #  Most suited to problems with k=2
 #############################################
 
-metapsg_gv <- function(sumstat, n_s, alpha=0.1, lambda, same_var = FALSE, gwas = FALSE, 
+metapsg_gv <- function(sumstat, n_s, alpha=0.1, lambda, gwas = FALSE, 
                                rho=1, t_inc=2, t_dec=2, mu=10,
                                w_p, w_g, 
                                max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02) {
@@ -45,7 +45,7 @@ metapsg_gv <- function(sumstat, n_s, alpha=0.1, lambda, same_var = FALSE, gwas =
   mrho_inv <- list()
   for (g in 1:G){
     # print(g)
-    mrho_inv[[g]] <- f_cpp_mrho_inv(covar_inv=inv_var_t[[g]], rho=rho, same_var=same_var)
+    mrho_inv[[g]] <- f_cpp_mrho_inv(covar_inv=inv_var_t[[g]], rho=rho)
   }
   
   # Starting values for b, z & u
@@ -110,12 +110,12 @@ metapsg_gv <- function(sumstat, n_s, alpha=0.1, lambda, same_var = FALSE, gwas =
         rho <- rho * t_inc
         u <- mapply(FUN=function(x) x<-x/t_inc, u, SIMPLIFY=FALSE)
         mrho_inv <- list()
-        for (g in 1:G){mrho_inv[[g]] <- f_cpp_mrho_inv(covar_inv=inv_var_t[[g]], rho=rho, same_var=same_var)}
+        for (g in 1:G){mrho_inv[[g]] <- f_cpp_mrho_inv(covar_inv=inv_var_t[[g]], rho=rho)}
     } else if (cc_s_norm > mu * cc_r_norm) {
         rho <- rho/t_dec
         u <- mapply(FUN=function(x) x<-x*t_dec, u, SIMPLIFY=FALSE)
         mrho_inv <- list()
-        for (g in 1:G){mrho_inv[[g]] <- f_cpp_mrho_inv(covar_inv=inv_var_t[[g]], rho=rho, same_var=same_var)}
+        for (g in 1:G){mrho_inv[[g]] <- f_cpp_mrho_inv(covar_inv=inv_var_t[[g]], rho=rho)}
     }
     
   }
@@ -163,8 +163,8 @@ metapsg_gv <- function(sumstat, n_s, alpha=0.1, lambda, same_var = FALSE, gwas =
 #'   inverse of the Frobenius norm of its matrix `beta`. If `FALSE`, the
 #'   weight of a variable is `sqrt(K)` and the weight of a group is
 #'   `sqrt(n_g * K)`.
-#' @param same_var Logical. Currently ignored: the solver is always called
-#'   with `same_var = FALSE`.
+#' @param same_var Not supported and ignored (a warning is issued if `TRUE`).
+#'   Kept for compatibility with existing scripts.
 #' @param gwas Logical. If `FALSE` (the default), the goodness-of-fit term of
 #'   the modified information criterion (MIC) is the sum, over studies, of the
 #'   quadratic form of the differences between penalised and input estimates
@@ -206,6 +206,7 @@ metapsg_gv <- function(sumstat, n_s, alpha=0.1, lambda, same_var = FALSE, gwas =
 #'
 #' @export
 f_selec_mod_metapsg_gv <- function(sumstat, n_s, alpha, adaptive=TRUE, same_var = FALSE, gwas = FALSE, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-02, npts=20){
+  if (isTRUE(same_var)) warning("'same_var' is not supported and is ignored.")
   selmod <- data.frame(alpha=NA, lambda=NA, MIC=NA, iter=NA, norm_betah=NA)
   results <- list()
   G <- length(sumstat)
@@ -221,13 +222,13 @@ f_selec_mod_metapsg_gv <- function(sumstat, n_s, alpha, adaptive=TRUE, same_var 
     for (g in 1:G){w_g[[g]] <- f_weight_g_per_group(sumstat[[g]]$beta, adaptive=FALSE)} 
   }
   # To build the grid of 
-  lambda_max <- find_lambda_max(sumstat=sumstat, n_s=n_s, alpha=alpha, w_g=w_g, w_p=w_p)
+  lambda_max <- find_lambda_max(sumstat=sumstat, n_s=n_s, alpha=alpha, w_g=w_g, w_p=w_p, rho=rho, t_inc=t_inc, t_dec=t_dec, mu=mu, max_iter=max_iter, tol_abs=tol_abs, tol_rel=tol_rel)
   lambda_grid <- f_grid_loge(lambda_max, eps=eps, npts=npts)
   # To run  meta-psg solver on the grid
   for (i in 1:length(lambda_grid)){
     results[[i]] <- list(info_grid=NA, beta_select=NA, info=NA)
     # temporary stock
-    tempo <- metapsg_gv(sumstat, n_s, alpha, lambda_grid[i], same_var = FALSE, gwas = gwas, rho, t_inc, t_dec, mu, w_p, w_g, max_iter, tol_abs, tol_rel)
+    tempo <- metapsg_gv(sumstat, n_s, alpha=alpha, lambda=lambda_grid[i], gwas=gwas, rho=rho, t_inc=t_inc, t_dec=t_dec, mu=mu, w_p=w_p, w_g=w_g, max_iter=max_iter, tol_abs=tol_abs, tol_rel=tol_rel)
     # information for model selection
     temp_selmod <- data.frame(alpha=NA, lambda=NA, MIC=NA, iter=NA, norm_betah=NA, ng_hit=NA, nv_hit=NA)
     temp_selmod$alpha <- alpha

@@ -103,18 +103,11 @@ f_mrho_inv <- function(covar_inv, rho, same_var=FALSE){
 }
 
 # C++ version
-f_cpp_mrho_inv <- function(covar_inv, rho, same_var=FALSE){
+f_cpp_mrho_inv <- function(covar_inv, rho){
   K <- dim(covar_inv)[3]
   n <- dim(covar_inv)[1]
   result <- array(NA,dim=c(n,n,K))
-  if (same_var==TRUE){
-    tempo_val <- arma_inv(2*covar_inv[,,1] + diag(rho,dim(covar_inv)[1]))
-    for (k in 1:K){result[,,k] <- tempo_val}
-    #result <- apply(result, MARGIN=3, function(x) x<-tempo_val, simplify=FALSE)
-  } else {
-    for (k in 1:K){result[,,k] <- arma_inv(2*covar_inv[,,k] + diag(rho,dim(covar_inv)[1]))}
-    #result <- apply(covar_inv, MARGIN=3, function(x) x <- arma_inv(2*x + diag(rho,dim(x)[1])), simplify=FALSE)
-  }
+  for (k in 1:K){result[,,k] <- arma_inv(2*covar_inv[,,k] + diag(rho,dim(covar_inv)[1]))}
   #result <- do.call(abind::abind, c(result, along = 3))
   return(result)
 }
@@ -292,6 +285,14 @@ f_mic_v_inv_us <- function(beta_h, beta_t, n_s, inv_var){
 # Getting the starting lambda...
 ###################################
 
+# Largest finite value of x (NA if there is none). Bounds are infinite or
+# undefined when an observed effect is exactly 0; such values are ignored.
+f_max_finite <- function(x){
+  x <- x[is.finite(x)]
+  if (length(x) == 0) return(NA_real_)
+  max(x)
+}
+
 # To find lambda max if only variable x studies structure is considered for regularization
 find_lambda_max_in_g_for_vsnorm <- function (sumstat, w_p, coeff=1){
   G <- length(sumstat)
@@ -303,9 +304,9 @@ find_lambda_max_in_g_for_vsnorm <- function (sumstat, w_p, coeff=1){
     for (k in 1:K){
       v_this_g[,k] <- (2/ w_p[[g]]) * sqrt(rowSums(sumstat[[g]]$beta^2)) * abs(sumstat[[g]]$cov_inv[,,k] %*% sumstat[[g]]$beta[,k]) / abs(sumstat[[g]]$beta[,k])
     }
-    v_lambda_max[g] <- max(v_this_g, na.rm=TRUE)
+    v_lambda_max[g] <- f_max_finite(v_this_g)
   }
-  result <- max(v_lambda_max)/coeff
+  result <- f_max_finite(v_lambda_max)/coeff
   return(result)
 }
 
@@ -319,9 +320,9 @@ find_lambda_max_in_g_for_gnorm <- function (sumstat, w_g, coeff=1){
     for (k in 1:K){
       v_this_g[,k] <- (2/ w_g[[g]]) * norm(sumstat[[g]]$beta, type="F") * abs(sumstat[[g]]$cov_inv[,,k] %*% sumstat[[g]]$beta[,k]) / abs(sumstat[[g]]$beta[,k])
     }
-    v_lambda_max[g] <- max(v_this_g, na.rm=TRUE)
+    v_lambda_max[g] <- f_max_finite(v_this_g)
   }
-  result <- max(v_lambda_max)/coeff
+  result <- f_max_finite(v_lambda_max)/coeff
   return(result)
 }
 
@@ -363,25 +364,28 @@ f_grid_loge <- function(lambda_max, eps=1e-03, npts=20){
   return(result)
 }
 
-f_grid_log10 <- function(lambda_max, eps=1e-03, npts=20){
-  a <- log(lambda_max*eps, base = 10)
-  b <- log(lambda_max, base = 10)
-  result <- seq(from=a, to=b, length.out = npts) |> exp()
-  return(result)
-}
 
 #  To run the meta psg solver on a grid
 ##################################################
 
-find_lambda_max <- function(sumstat, n_s, alpha=0.1, w_g, w_p, f_test=1.5, f_selec=1.2){
+find_lambda_max <- function(sumstat, n_s, alpha=0.1, w_g, w_p, f_test=1.5, f_selec=1.2,
+                            rho=1, t_inc=2, t_dec=2, mu=10, max_iter=1000, tol_abs=1e-03, tol_rel=1e-02,
+                            max_halving=100){
   result <- 0
-  l_max <- min(find_lambda_max_in_g_for_gnorm(sumstat, w_g), find_lambda_max_in_g_for_vsnorm(sumstat, w_p))
-  test <- metapsg_gv(sumstat, n_s, alpha=alpha, lambda=l_max, w_p=w_p, w_g=w_g)
+  solve_at <- function(lambda) metapsg_gv(sumstat, n_s, alpha=alpha, lambda=lambda, w_p=w_p, w_g=w_g,
+                                          rho=rho, t_inc=t_inc, t_dec=t_dec, mu=mu, max_iter=max_iter,
+                                          tol_abs=tol_abs, tol_rel=tol_rel)
+  l_max <- suppressWarnings(min(c(find_lambda_max_in_g_for_gnorm(sumstat, w_g), find_lambda_max_in_g_for_vsnorm(sumstat, w_p)), na.rm=TRUE))
+  if (!is.finite(l_max)) stop("Unable to compute a starting value for lambda: all observed effects are zero or undefined.")
+  test <- solve_at(l_max)
+  n_halving <- 0
   while (test$info[dim(test$info)[1],]$z_norm==0) {
+    n_halving <- n_halving + 1
+    if (n_halving > max_halving) stop("No value of lambda giving a non-empty model was found after ", max_halving, " halvings.")
     l_max <- l_max / 2
-    test <- metapsg_gv(sumstat, n_s, alpha=alpha, lambda=l_max, w_p=w_p, w_g=w_g)
+    test <- solve_at(l_max)
   }
-  test <- metapsg_gv(sumstat, n_s, alpha=alpha, lambda=f_test*l_max, w_p=w_p, w_g=w_g)
+  test <- solve_at(f_test*l_max)
   if(test$info[dim(test$info)[1],]$z_norm!=0){result <- f_test * l_max}else{result <- f_selec * l_max}
   return(result)
 }

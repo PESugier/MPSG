@@ -1,6 +1,6 @@
 
 # Function to create alpha/lambda grid
-f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var = FALSE, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-03, npts=20){
+f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-03, npts=20){
     #setup parallel backend to use many processors
     #
 	n_alpha <- length(alpha)
@@ -11,14 +11,14 @@ f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var =
     # To build the grid of lambda for each value of alpha
     found_grid <- foreach(i=1:n_alpha, .packages = "MPSG") %dopar% {
         #redefine functions
-        lambda_max <- find_lambda_max(sumstat=sumstat, n_s=n_s, alpha=alpha[i], w_g=w_g, w_p=w_p)
+        lambda_max <- find_lambda_max(sumstat=sumstat, n_s=n_s, alpha=alpha[i], w_g=w_g, w_p=w_p, rho=rho, t_inc=t_inc, t_dec=t_dec, mu=mu, max_iter=max_iter, tol_abs=tol_abs, tol_rel=tol_rel)
         lambda_grid <- f_grid_loge(lambda_max, eps=eps, npts=npts)
 		list(alpha=alpha[i], lambdas=lambda_grid)
     }
 	stopCluster(cl_grid)
 	#
 	list_grid<-cbind(alpha=rep(found_grid[[1]]$alpha, npts), lambda=found_grid[[1]]$lambdas)
-	for (i in 2:n_alpha){list_grid <- rbind(list_grid,cbind(alpha=rep(found_grid[[i]]$alpha, npts), lambda=found_grid[[i]]$lambdas))}
+	for (i in seq_len(n_alpha)[-1]){list_grid <- rbind(list_grid,cbind(alpha=rep(found_grid[[i]]$alpha, npts), lambda=found_grid[[i]]$lambdas))}
 	#
 	return(list_grid)
 }   
@@ -40,8 +40,7 @@ f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var =
 #'
 #' @inheritParams f_selec_mod_metapsg_gv
 #' @param alpha Numeric vector of values of `alpha` (share of the penalty
-#'   given to the variable level, see [f_selec_mod_metapsg_gv()]). In the
-#'   current implementation, it must contain at least two values.
+#'   given to the variable level, see [f_selec_mod_metapsg_gv()]).
 #' @param eps Ratio between the smallest and the largest value of the grid of
 #'   `lambda`, for each value of `alpha`.
 #' @param npts Number of values in the grid of `lambda`, for each value of
@@ -67,6 +66,7 @@ f_metapsg_gv_parallel_grid <- function(sumstat, n_s, alpha, w_g, w_p, same_var =
 #'
 #' @export
 f_selec_mod_metapsg_gv_parallel <- function(sumstat, n_s, alpha, adaptive=TRUE, same_var = FALSE, rho=1, t_inc=2, t_dec=2, mu=10, max_iter = 1000, tol_abs = 1e-03, tol_rel = 1e-02, eps=1e-03, npts=20, ncpu){
+  if (isTRUE(same_var)) warning("'same_var' is not supported and is ignored.")
   #
   #Definitions step
   #
@@ -84,7 +84,7 @@ f_selec_mod_metapsg_gv_parallel <- function(sumstat, n_s, alpha, adaptive=TRUE, 
         for (g in 1:G){w_g[[g]] <- f_weight_g_per_group(sumstat[[g]]$beta, adaptive=FALSE)} 
     }
   # To build the grid of 
-  grid_to_run <- f_metapsg_gv_parallel_grid(sumstat=sumstat,n_s=n_s,alpha=alpha,w_g,w_p,same_var=same_var,rho=rho,t_inc=t_inc,t_dec=t_dec,mu=mu,max_iter=max_iter,tol_abs=tol_abs,tol_rel=tol_rel,eps=eps,npts=npts)
+  grid_to_run <- f_metapsg_gv_parallel_grid(sumstat=sumstat,n_s=n_s,alpha=alpha,w_g,w_p,rho=rho,t_inc=t_inc,t_dec=t_dec,mu=mu,max_iter=max_iter,tol_abs=tol_abs,tol_rel=tol_rel,eps=eps,npts=npts)
   grid_to_run <- grid_to_run
   #
   #setup parallel backend to use many processors
@@ -100,7 +100,7 @@ f_selec_mod_metapsg_gv_parallel <- function(sumstat, n_s, alpha, adaptive=TRUE, 
   results <- foreach(i=1:dim(grid_to_run)[1], .packages = "MPSG") %dopar% {
     #redefine functions
     # temporary stock
-    tempo <- metapsg_gv(sumstat, n_s, alpha=grid_to_run[i,1], lambda=grid_to_run[i,2], same_var = FALSE, gwas=FALSE, rho, t_inc, t_dec, mu, w_p, w_g, max_iter, tol_abs, tol_rel)
+    tempo <- metapsg_gv(sumstat, n_s, alpha=grid_to_run[i,1], lambda=grid_to_run[i,2], gwas=FALSE, rho=rho, t_inc=t_inc, t_dec=t_dec, mu=mu, w_p=w_p, w_g=w_g, max_iter=max_iter, tol_abs=tol_abs, tol_rel=tol_rel)
     # information for model selection
     list(info_grid=data.frame(alpha=grid_to_run[i,1], lambda=grid_to_run[i,2], MIC=tempo$MIC, iter=dim(tempo$info)[1], norm_betah=tempo$info[dim(tempo$info)[1], "z_norm"]), beta_select=tempo$beta_select, info=tempo$info)
   }

@@ -18,3 +18,13 @@ git tag `v1.1`.
 Note on the application data: the summary statistics cover 3,707 SNPs in 331
 genes. The 3,766 SNPs reported in the paper include duplicated SNPs (in complete
 linkage disequilibrium) that were removed before the analysis.
+
+## Changes to the archived material
+
+The files of this folder are kept as they were at publication (tag `v1.1`),
+except for two one-line fixes so that the archived code runs:
+
+- `application/script_metapsg_BC_TC.r`: the line `RESULT FILE MANAGEMENT` was not
+  commented out, which caused a syntax error.
+- `application/README.md`: `append(pleio_genes, ...)` replaced by
+  `append(pleio_genes_res, ...)`; the variable `pleio_genes` was not defined.

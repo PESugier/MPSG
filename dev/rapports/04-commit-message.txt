@@ -1,0 +1,10 @@
+Fix known bugs (no change to results with the settings of the paper)
+
+- find_lambda_max: ignore infinite bounds when an observed effect is exactly 0,
+  and cap the number of halvings (fixes an infinite loop)
+- find_lambda_max: use the ADMM settings given by the user
+- parallel grid search: allow a single value of alpha
+- same_var: removed from the computation; ignored with a warning in the
+  legacy functions
+- f_grid_log10: removed (wrong and never used)
+- paper/: two one-line fixes so that the archived scripts run

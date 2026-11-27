@@ -8,9 +8,10 @@
 | 4 | 2026-11-26 | Les données complètes comptent 3 707 SNPs (le papier indique 3 766, doublons en DL complet inclus). À signaler sobrement dans `paper/README.md` et dans la documentation du jeu de données | 2, puis création du jeu de données |
 | 5 | 2026-11-26 | Fonctions héritées : ne conserver que les 3 fonctions appelées par les scripts du papier (`f_cpp_inv_var`, `f_selec_mod_metapsg_gv`, `f_selec_mod_metapsg_gv_parallel`), avec les mêmes arguments et les mêmes sorties, et un message de dépréciation | Étape de la nouvelle interface |
 | 6 | 2026-11-26 | Supprimer le code C++ (RcppArmadillo) : inutile une fois l'inversion remplacée par une décomposition spectrale. Les résultats de référence viennent des fichiers du papier, pas d'une ré-exécution du code C++ | Étape d'optimisation |
-| 7 | 2026-11-26 | Supprimer l'argument `same_var` (conservé seulement dans la signature de `f_cpp_inv_var`) et la fonction `f_grid_log10` (jamais appelée) | Étape des corrections |
+| 7 | 2026-11-26 | `same_var` : retiré des fonctions de calcul internes. Il reste dans la signature des 3 fonctions héritées, pour la compatibilité avec les scripts du papier : ignoré avec un avertissement s'il vaut TRUE dans `f_selec_mod_metapsg_gv*` ; comportement d'origine conservé dans `f_cpp_inv_var`. `f_grid_log10` (erronée, jamais appelée) supprimée | 4 |
 | 8 | 2026-11-26 | Publier un erratum du papier sur GitHub (`paper/ERRATA.md`), après relecture par les co-auteurs. Points identifiés : facteur 1/n_s manquant dans le MIC (section « Hyper-parameters tuning » et annexe A) ; λ1 et λ2 inversés dans l'algorithme 1 ; signe du terme (ρ/2)‖U‖² du lagrangien augmenté ; nombre de SNPs | Étape dédiée, contenu à valider |
 | 9 | 2026-11-26 | Étape 3 = empaquetage sans aucun changement d'algorithme. Le C++ est conservé jusqu'à l'étape d'optimisation (Rtools est présent). Dépendances inutilisées ou redondantes retirées (doSNOW, tictoc, abind, Matrix). Version de développement 1.1.9000. Seules les 3 fonctions héritées sont exportées | 3 |
+| 10 | 2026-11-27 | Étape 4 : (a) corriger les deux erreurs d'une ligne des scripts archivés de `paper/` et le signaler dans `paper/README.md` ; (b) `find_lambda_max` utilise les réglages ADMM fournis par l'utilisateur ; (c) bornes de λ infinies ignorées et nombre de divisions par 2 plafonné, avec erreur explicite. Journaux `*.log` non versionnés ; `.gitattributes` traité plus tard dans un commit séparé | 4 |
 
 ## D2 — Auteurs (champ `Authors@R` de `DESCRIPTION`)
 
@@ -48,15 +49,18 @@ We thank Pascal Guénel (PI of CECILE and CATHY) and Florent de Vathaire (PI of
 Young-thyr) for providing the data.
 ```
 
-## Bugs connus (à traiter à l'étape des corrections, pas avant)
+## Bugs connus
+Corrigés à l'étape 4 :
 - Boucle infinie quand un β̂ vaut exactement 0 (bornes de λ infinies dans `find_lambda_max`).
-- `f_metapsg_gv_parallel_grid` échoue avec une seule valeur de α (`for (i in 2:n_alpha)`).
-- `same_var` ignoré par les fonctions de grille (décision 7 : suppression).
-- `f_grid_log10` erronée et jamais appelée (décision 7 : suppression).
-- `paper/application/script_metapsg_BC_TC.r` : ligne 99 non commentée (erreur de syntaxe). Archive : décider s'il faut la corriger.
-- `paper/application/README.md` : variable `pleio_genes` inexistante. Archive : idem.
+- `find_lambda_max` appelait le solveur avec ses paramètres par défaut, et non ceux de l'utilisateur.
+- `f_metapsg_gv_parallel_grid` échouait avec une seule valeur de α (`for (i in 2:n_alpha)`).
+- `same_var` ignoré par les fonctions de grille (décision 7).
+- `f_grid_log10` erronée et jamais appelée (décision 7).
+- `paper/application/script_metapsg_BC_TC.r` : ligne 99 non commentée (erreur de syntaxe).
+- `paper/application/README.md` : variable `pleio_genes` inexistante.
 
 ## Décisions en attente (à trancher au moment de l'étape concernée)
+- Fins de ligne : ajout d'un `.gitattributes` (commit séparé)
 - Critère d'arrêt de l'ADMM, tolérances par défaut, garde-fou sur rho
 - Filtre ad hoc chi2 du papier : retrouver le script utilisé avant toute implémentation
 - Grille de lambda par défaut (proposition : alpha = 0.1 à 0.9 par 0.1, eps = 1e-3, 30 valeurs)

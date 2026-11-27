@@ -207,7 +207,7 @@ pleio_genes_names <- c()
 pleio_genes_indice <- c()
 for (g in 1:n_example){
   if(norm(final_model[[g]])!=0){
-    pleio_genes_res <- append(pleio_genes,list(c=final_model[[g]]))
+    pleio_genes_res <- append(pleio_genes_res,list(c=final_model[[g]]))
     pleio_genes_names <- c(pleio_genes_names,names(final_model)[g])
     pleio_genes_indice <- c(pleio_genes_indice,g)
   }

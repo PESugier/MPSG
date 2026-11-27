@@ -34,8 +34,7 @@ group, one column per study), and \code{cov_inv}, a numeric array of dimension
 study, in the same order as the columns of \code{beta}.}
 
 \item{alpha}{Numeric vector of values of \code{alpha} (share of the penalty
-given to the variable level, see \code{\link[=f_selec_mod_metapsg_gv]{f_selec_mod_metapsg_gv()}}). In the
-current implementation, it must contain at least two values.}
+given to the variable level, see \code{\link[=f_selec_mod_metapsg_gv]{f_selec_mod_metapsg_gv()}}).}
 
 \item{adaptive}{Logical. If \code{TRUE} (the default), adaptive weights are
 used: the weight of a variable is the inverse of the Euclidean norm of
@@ -44,8 +43,8 @@ inverse of the Frobenius norm of its matrix \code{beta}. If \code{FALSE}, the
 weight of a variable is \code{sqrt(K)} and the weight of a group is
 \code{sqrt(n_g * K)}.}
 
-\item{same_var}{Logical. Currently ignored: the solver is always called
-with \code{same_var = FALSE}.}
+\item{same_var}{Not supported and ignored (a warning is issued if \code{TRUE}).
+Kept for compatibility with existing scripts.}
 
 \item{rho}{Positive numeric: initial value of the ADMM penalty parameter.}
 

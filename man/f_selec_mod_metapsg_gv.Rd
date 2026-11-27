@@ -44,8 +44,8 @@ inverse of the Frobenius norm of its matrix \code{beta}. If \code{FALSE}, the
 weight of a variable is \code{sqrt(K)} and the weight of a group is
 \code{sqrt(n_g * K)}.}
 
-\item{same_var}{Logical. Currently ignored: the solver is always called
-with \code{same_var = FALSE}.}
+\item{same_var}{Not supported and ignored (a warning is issued if \code{TRUE}).
+Kept for compatibility with existing scripts.}
 
 \item{gwas}{Logical. If \code{FALSE} (the default), the goodness-of-fit term of
 the modified information criterion (MIC) is the sum, over studies, of the

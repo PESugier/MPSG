@@ -96,7 +96,7 @@ for (g in 1:G){
   rownames(final_model[[g]]) <- annoted_snp[selected_ids,]
 }
 ##############################################################################################
-RESULT FILE MANAGEMENT
+# RESULT FILE MANAGEMENT
 ################################
 pleio_genes<-list()
 indice_hit<-c()
